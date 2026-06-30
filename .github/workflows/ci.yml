@@ -34,3 +34,7 @@ jobs:
       - name: Verify Python Syntax
         run: |
           python -m compileall .
+
+      - name: Build Docker Image
+        run: |
+          docker build -t infraguard-ai .
