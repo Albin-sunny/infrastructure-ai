@@ -35,6 +35,10 @@ jobs:
         run: |
           python -m compileall .
 
-      - name: Build Docker Image
+      - name: Build Backend Docker Image
         run: |
-          docker build -t infraguard-ai .
+          docker build -f Dockerfile.backend -t infraguard-backend .
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build -f Dockerfile.frontend -t infraguard-frontend .

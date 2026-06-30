@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import os
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 import uuid
 
 st.set_page_config(
@@ -40,9 +41,9 @@ if uploaded_file is not None:
     try:
         with st.spinner("Analyzing image..."):
             response = requests.post(
-                "http://127.0.0.1:8000/detect",
+                f"{API_URL}/detect",
                 files=files
-            )
+        )
             response.raise_for_status()
             result = response.json()
 
@@ -104,11 +105,11 @@ if st.button("Ask"):
     else:
         try:
             response = requests.post(
-                "http://127.0.0.1:8000/inspection-chat",
-                json={"question": question
-                      ,"conversation_id":st.session_state.conversation_id
-                      
-                      }
+                f"{API_URL}/inspection-chat",
+                json={
+                    "question": question,
+                    "conversation_id": st.session_state.conversation_id
+                }
             )
             response.raise_for_status()
             result = response.json()

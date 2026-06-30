@@ -3,7 +3,10 @@ version: "3.9"
 services:
 
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+
     container_name: infraguard-backend
 
     ports:
@@ -16,6 +19,24 @@ services:
 
     depends_on:
       - postgres
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+
+    container_name: infraguard-frontend
+
+    ports:
+      - "8501:8501"
+
+    restart: unless-stopped
+
+    environment:
+      API_URL: http://backend:8000
+
+    depends_on:
+      - backend
 
   postgres:
     image: postgres:16
