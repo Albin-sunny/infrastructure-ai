@@ -43,7 +43,7 @@ if uploaded_file is not None:
             response = requests.post(
                 f"{API_URL}/detect",
                 files=files
-        )
+            )
             response.raise_for_status()
             result = response.json()
 
