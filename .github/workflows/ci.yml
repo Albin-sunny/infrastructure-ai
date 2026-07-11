@@ -13,7 +13,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     permissions:
@@ -21,7 +20,6 @@ jobs:
       packages: write
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -55,14 +53,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Convert Repository Owner to Lowercase
+        if: github.event_name == 'push'
+        id: owner
+        run: |
+          echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
       - name: Tag and Push Backend Image
         if: github.event_name == 'push'
         run: |
-          docker tag infraguard-backend ghcr.io/${{ github.repository_owner }}/infraguard-backend:latest
-          docker push ghcr.io/${{ github.repository_owner }}/infraguard-backend:latest
+          docker tag infraguard-backend ghcr.io/${{ steps.owner.outputs.owner }}/infraguard-backend:latest
+          docker push ghcr.io/${{ steps.owner.outputs.owner }}/infraguard-backend:latest
 
       - name: Tag and Push Frontend Image
         if: github.event_name == 'push'
         run: |
-          docker tag infraguard-frontend ghcr.io/${{ github.repository_owner }}/infraguard-frontend:latest
-          docker push ghcr.io/${{ github.repository_owner }}/infraguard-frontend:latest
+          docker tag infraguard-frontend ghcr.io/${{ steps.owner.outputs.owner }}/infraguard-frontend:latest
+          docker push ghcr.io/${{ steps.owner.outputs.owner }}/infraguard-frontend:latest
