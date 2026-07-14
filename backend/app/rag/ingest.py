@@ -9,9 +9,7 @@ import pickle
 import os
 
 
-# ==========================
-# Load PDFs
-# ==========================
+
 
 text = ""
 
@@ -33,9 +31,7 @@ for file in os.listdir(pdf_folder):
                 text += page_text + "\n"
 
 
-# ==========================
-# Chunking
-# ==========================
+
 
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
@@ -47,9 +43,7 @@ chunks = splitter.split_text(text)
 print("Chunks:", len(chunks))
 
 
-# ==========================
-# Embeddings
-# ==========================
+
 
 model = SentenceTransformer(
     "all-MiniLM-L6-v2"
@@ -66,9 +60,7 @@ embeddings = np.array(
 )
 
 
-# ==========================
-# FAISS Index
-# ==========================
+
 
 dimension = embeddings.shape[1]
 
@@ -84,17 +76,13 @@ faiss.write_index(
 )
 
 
-# ==========================
-# Save Chunks
-# ==========================
+
 
 with open("chunks.pkl", "wb") as f:
     pickle.dump(chunks, f)
 
 
-# ==========================
-# TF-IDF
-# ==========================
+
 
 vectorizer = TfidfVectorizer(
     stop_words="english"

@@ -6,35 +6,27 @@ import pickle
 import numpy as np
 
 
-# ==========================
-# Load Model
-# ==========================
+
 
 model = SentenceTransformer(
     "all-MiniLM-L6-v2"
 )
 
 
-# ==========================
-# Load FAISS
-# ==========================
+
 
 index = faiss.read_index(
     "faiss_index.bin"
 )
 
 
-# ==========================
-# Load Chunks
-# ==========================
+
 
 with open("chunks.pkl", "rb") as f:
     chunks = pickle.load(f)
 
 
-# ==========================
-# Load TF-IDF
-# ==========================
+
 
 with open("tfidf_vectorizer.pkl", "rb") as f:
     vectorizer = pickle.load(f)
@@ -43,17 +35,13 @@ with open("tfidf_matrix.pkl", "rb") as f:
     tfidf_matrix = pickle.load(f)
 
 
-# ==========================
-# Hybrid Retrieval
-# ==========================
+
 
 def retrieve(query, k=5):
 
     try:
 
-        # ------------------
-        # Semantic Search
-        # ------------------
+       
 
         query_embedding = model.encode(
             [query],
@@ -65,9 +53,7 @@ def retrieve(query, k=5):
             20
         )
 
-        # ------------------
-        # TF-IDF Search
-        # ------------------
+        
 
         query_tfidf = vectorizer.transform(
             [query]
@@ -90,9 +76,7 @@ def retrieve(query, k=5):
             keyword_top_indices
     )
 
-        # ------------------
-        # Hybrid Scoring
-        # ------------------
+       
 
         scored_chunks = []
 
@@ -130,9 +114,7 @@ def retrieve(query, k=5):
                 )
         )
 
-        # ------------------
-        # Sort Results
-        # ------------------
+       
 
         scored_chunks.sort(
             reverse=True,

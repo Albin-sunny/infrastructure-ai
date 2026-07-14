@@ -21,3 +21,17 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+
+
+def get_db():
+    """
+    Production-grade Database Session Generator.
+    Guarantees that every API request gets its own isolated database connection
+    and safely closes it when the request finishes.
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
